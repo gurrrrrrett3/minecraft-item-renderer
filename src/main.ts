@@ -1,23 +1,30 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import { setupCounter } from './counter'
+import * as THREE from 'three'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
+camera.position.set( 0, 0, 100 );
+camera.lookAt( 0, 0, 0 );
+
+const scene = new THREE.Scene();
+
+const material = new THREE.LineBasicMaterial( { color: 0x0000ff, opacity: 0.3 } );
+
+const cube = new THREE.BoxGeometry( 20, 20, 20 );
+
+cube
+
+scene.add( new THREE.Mesh( cube, material ) );
+renderer.render( scene, camera );
+
+setInterval(() => {
+
+  cube.rotateX(0.01);
+  cube.rotateY(0.01);
+
+  renderer.render( scene, camera );
+
+}, 1000 / 60);
